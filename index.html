@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather</title>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Lobster+Two&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h2>weather</h2>
+        <input type="text" id="city" placeholder="Type City Name..">
+        <button id="enter" onclick="enterData()"><i class="fas fa-search"></i></button>
+    </div>
+    <script src="jquery.js"></script>
+    <script>
+        function enterData() {  
+            var xml = new XMLHttpRequest;
+            var a = "http://api.openweathermap.org/data/2.5/weather?q="
+            var city = $('#city').val();
+            var b = "&appid=0a2a7a91fac0e4f74092186bdceb8b2b&units=metric"
+            xml.open("GET", a + city + b, true)
+            xml.onreadystatechange = function () {
+                // console.log( xml.readystate, xml.status)
+                if (xml.readyState === 4 && xml.status === 200) {
+                    let data = JSON.parse(xml.response);
+                    var code=data.weather[0].icon
+                    $('.container').html(`<input type="text" id="city" placeholder="Type City Name..">
+                    <button id="enter" onclick="enterData()">Search</button>
+                   <h1 class="city">${data.name}</h1>
+                   <h1 id="temp"> ${data.main.temp + '°C'} </h1>
+                   <p id="maintemp">Current Temp.</p>
+                   <h3 id="mintemp">${data.main.temp_min + '°C'}</h3>
+                   <p id="mintempinfo">Min Temp.</p>
+                   <h3 id="maxtemp">${data.main.temp_max + '°C'}</h3>
+                   <p id="maxtempinfo">Max Temp.</p>
+                  <img src="http://openweathermap.org/img/wn/${code}@2x.png" alt="" class="imgg">`
+        )  
+        // &#176 use for degree sign
+                } else if (xml.status === 404) {
+                    $('.container').html(`<input type="text" id="city" placeholder="Type City Name..">
+                    <button id="enter" onclick="enterData()">Search</button> 
+                    <h1 class="city">Please Enter Correct City Name</h1>`)
+                }
+
+            }
+            xml.send()
+        }
+    </script>
+</body>
+</html>
